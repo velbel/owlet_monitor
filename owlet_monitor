@@ -150,9 +150,15 @@ def record_vitals(p):
     device_sn = p['DSN']
     vitals = json.loads(p['REAL_TIME_VITALS']['value'])
     timestamp = p['REAL_TIME_VITALS']['data_updated_at']
-    keys = ["hr", "ox", "mv", "bso", "bat", "btt", "chg", "alrt", "mvb", "mst"]
+    keys = ["hr", "ox", "mv", "mvb", "ss", "srf", "st", "oxta", "mst"]
     data = {k: vitals[k] for k in keys}
-    disp = json.dumps(data | {"ts" : timestamp})
+    mst_time = datetime.fromtimestamp(vitals["mst"], tz=timezone.utc)
+    ts_time = datetime.fromisoformat(timestamp)
+    elapsed_time = ts_time - mst_time
+    data["ts"] = str(ts_time)
+    data["mst"] = str(mst_time)
+    data["et"] = str(elapsed_time)
+    disp = json.dumps(data)
     record(disp)
 
 def loop():
