@@ -164,7 +164,7 @@ def loop():
             fetch_dsn()
             for prop in fetch_props():
                 record_vitals(prop)
-            time.sleep(10)
+            time.sleep(5)
         except requests.exceptions.RequestException as e:
             log('Network error: %s' % e)
             time.sleep(1)
